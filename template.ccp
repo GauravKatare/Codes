@@ -6,8 +6,13 @@
 #define MOD 1000000007
 #define mp make_pair
 #define pb push_back
+#define pf push_front
+#define pob pop_back
+#define pof pop_front
 #define fi first
 #define se second
+#define sz(x)	(ll)x.size()
+#define present(c,x) ((c).find(x) != (c).end())
 #define boost ios_base::sync_with_stdio(false);cin.tie(NULL);
 #define debug(x) cout << #x << ": " << x << endl;
 #define debug2(x,y) cout<<#x<<": "<< x<< ", "<< #y<< ": "<< y<< endl;
@@ -33,8 +38,19 @@ ll power(ll a,ll b,ll m)
 		return (((dp*dp)%m)*a)%m;	
 }
 
+void solve()
+{
+}
+
 int main()
 {
 	boost
+	ll t=1;
+	//cin>>t;
+	while(t--)
+	{
+		solve();
+	}
 	return 0;
 }
+
