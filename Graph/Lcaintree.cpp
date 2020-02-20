@@ -40,6 +40,7 @@ void bfs(ll x)
 		{
 			if(level[v[a][i]]==-1)
 			{
+				par[v[a][i]]=a;
 				q.push(v[a][i]);
 				level[v[a][i]]=level[a]+1;
 			}
@@ -89,7 +90,6 @@ void solve()
 	for(ll i=1;i<n;i++)
 	{
 		cin>>a>>b;
-		par[b]=a;
 		v[a].pb(b);
 		v[b].pb(a);
 	}
