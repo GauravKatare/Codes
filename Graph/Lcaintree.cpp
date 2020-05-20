@@ -26,24 +26,15 @@ using namespace __gnu_pbds;
 ll level[200005],dpp[200005][22],par[200005];
 vector<ll>v[200005];
 
-void bfs(ll x)
+void dfs(int x,int p)
 {
-	memset(level,-1,sizeof(level));
-	queue<ll>q;
-	q.push(x);
-	level[x]=1;
-	while(!q.empty())
+	level[x]=level[p]+1;
+	for(int i=0;i<sz(v[x]);i++)
 	{
-		ll a=q.front();
-		q.pop();
-		for(ll i=0;i<sz(v[a]);i++)
+		if(v[x][i]!=p)
 		{
-			if(level[v[a][i]]==-1)
-			{
-				par[v[a][i]]=a;
-				q.push(v[a][i]);
-				level[v[a][i]]=level[a]+1;
-			}
+			par[v[x][i].fi]=x;
+			dfs(v[x][i],x);
 		}
 	}
 }
@@ -93,7 +84,7 @@ void solve()
 		v[a].pb(b);
 		v[b].pb(a);
 	}
-	bfs(1);
+	dfs(1,0);
 	computeparent(n);
 	cin>>q;
 	while(q--)
