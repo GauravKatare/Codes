@@ -1,4 +1,4 @@
-void bfs(ll x)
+void dijkstra(ll x)
 {
 	ll i;
 	for(i=1;i<=n;i++)

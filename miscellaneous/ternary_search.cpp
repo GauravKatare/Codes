@@ -23,82 +23,51 @@ typedef long long int ll;
 #include <ext/pb_ds/tree_policy.hpp> 
 using namespace __gnu_pbds;   
 #define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update>
-ll level[200005],dpp[200005][22],par[200005];
-vector<ll>v[200005];
+double h,c,t;
 
-void dfs(int x,int p)
+double sol(double x)
 {
-	level[x]=level[p]+1;
-	for(int i=0;i<sz(v[x]);i++)
-	{
-		if(v[x][i]!=p)
-		{
-			par[v[x][i].fi]=x;
-			dfs(v[x][i],x);
-		}
-	}
+	double a=h*x;
+	double b=c*(x-1);
+	return abs(t-(a+b)/(2*x-1));
 }
 
-void computeparent(ll n)
+ll ternary_search(ll l,ll h) 
 {
-	for(ll i=1;i<=n;i++)
-		dpp[i][0]=par[i];
-	for(ll j=1;j<=21;j++)
+	double ans=1e6;
+	ll ind=h;
+	while(h-l>=3)
 	{
-		for(ll i=1;i<=n;i++)
-			dpp[i][j]=dpp[dpp[i][j-1]][j-1];
+		ll mid1=l+(h-l)/3;
+		ll mid2=h-(h-l)/3;
+		if(sol(mid1)>sol(mid2))
+			l=mid1;
+		else
+			h=mid2;
 	}
-}
-
-ll lca(ll a,ll b)
-{
-	if(level[b]>level[a])
-		swap(a,b);
-	ll diff=level[a]-level[b];
-	for(ll i=20;i>=0;i--)
+	// check for range l to h
+	for(ll i=l;i<=h;i++)
 	{
-		if(diff&(1LL<<i))
-			a=dpp[a][i];
-	}
-	if(a==b)
-		return a;
-	for(ll i=20;i>=0;i--)
-	{
-		if(dpp[a][i]!=dpp[b][i])
+		if(ans>sol(i))
 		{
-			a=dpp[a][i];
-			b=dpp[b][i];
+			ans=min(ans,sol(i));
+			ind=2*i-1;
 		}
 	}
-	return dpp[a][0];
+	return ind;
 }
 
 void solve()
 {
-	ll n,a,b,q;
-	cin>>n;
-	memset(par,-1,sizeof(par));
-	for(ll i=1;i<n;i++)
-	{
-		cin>>a>>b;
-		v[a].pb(b);
-		v[b].pb(a);
-	}
-	dfs(1,0);
-	computeparent(n);
-	cin>>q;
-	while(q--)
-	{
-		cin>>a>>b;
-		debug(lca(a,b));
-	}
+	cin>>h>>c>>t;
+	cout<<ternary_search(1,1e6)<<"\n";
 }
 
 int main()
 {
 	boost
 	ll t=1;
-	//cin>>t;
+	cin>>t;
 	while(t--)
 	{
 		solve();
