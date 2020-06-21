@@ -1,0 +1,2 @@
+ For finding large independent sets: take the node with the minimal degree, add it to the independent set, remove it and all its neighbors from the graph, and repeat. If at every step the node with the minimal degree has degree <sq−1, that algorithm solves the first problem. Otherwise, there's a step where EVERY node has degree at least sq−1. For graphs where every node has degree at least d, you can always find a cycle with length d+1.
+ Vandermonde's identity -> ∑k=(R,k)(M,n−k)=(R+M,n) where k is from 0 to n
