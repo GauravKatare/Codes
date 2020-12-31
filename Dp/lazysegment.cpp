@@ -18,16 +18,18 @@ typedef long long int ll;
 #include <ext/pb_ds/tree_policy.hpp> 
 using namespace __gnu_pbds;   
 #define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update>
-ll arr[100005],lazy[400005],n,st[400005];
+ll arr[100005],lazy[400005],n,tree[400005];
 
-ll build(ll node,ll start,ll end)
+void build(ll node,ll start,ll end)
 {
 	if(start==end){
-		st[node]=arr[start];
-		return st[node];
+		tree[node]=arr[start];
+		return;
 	}
 	ll mid=(start+end)/2;
-	st[node]=build(2*node,start,mid)+build(2*node+1,mid+1,end);
+    build(2*node+1,mid+1,end);
+    build(2*node,start,mid);
+	tree[node]=tree[2*node]+tree[2*node+1];
 	return st[node];
 }
 
