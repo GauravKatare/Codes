@@ -20,71 +20,64 @@ using namespace __gnu_pbds;
 #define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update>
 ll arr[100005],lazy[400005],n,st[400005];
 
-ll build(ll q,ll l,ll h)
+ll build(ll node,ll start,ll end)
 {
-	if(l==h)
-	{
-		st[q]=arr[l];
-		return st[q];
+	if(start==end){
+		st[node]=arr[start];
+		return st[node];
 	}
-	ll mid=(l+h)/2;
-	st[q]=build(2*q,l,mid)+build(2*q+1,mid+1,h);
-	return st[q];
+	ll mid=(start+end)/2;
+	st[node]=build(2*node,start,mid)+build(2*node+1,mid+1,end);
+	return st[node];
 }
 
-ll getans(ll q,ll o,ll e,ll l,ll h)
+void update(ll node,ll start,ll end,ll l,ll r,ll val)
 {
-	ll ans=0;
-	if(lazy[q]!=-1)
-	{
-		st[q]=max(st[q],1ll)*lazy[q];
-		if(l!=h)
-		{
-			lazy[2*q]=max(lazy[2*q],1ll)*lazy[q];
-			lazy[2*q+1]=max(lazy[2*q+1],1ll)*lazy[q];
-		}
-		lazy[q]=-1;
-	}
-	if(l>=o&&h<=e)
-		return st[q];
-	if(e<l||o>h)
-		return ans;
-	if(l!=h)
-	{
-		ll mid=(l+h)/2;
-		ans=getans(2*q,o,e,l,mid)+getans(2*q+1,o,e,mid+1,h);
-		return ans;
-	}
+    if(lazy[node]!=0)
+    { 
+        tree[node]+=(end-start+1)*lazy[node];
+        if(start != end){
+            lazy[node*2]+=lazy[node];                  
+            lazy[node*2+1]+=lazy[node];                
+        }
+        lazy[node] = 0;                                 
+    }
+    if(start>end||start>r||end<l)          
+        return;
+    if(start>=l&&end<=r)
+    {
+        tree[node]+=(end-start+1)*val;
+        if(start!=end){
+            lazy[node*2]+=val;
+            lazy[node*2+1]+=val;
+        }
+        return;
+    }
+    ll mid =(start+end)/2;
+    updateRange(node*2,start,mid,l,r,val);        
+    updateRange(node*2+1,mid+1,end,l,r,val);  
+    tree[node]=tree[node*2]+tree[node*2+1];        
 }
 
-ll update(ll q,ll o,ll e,ll l,ll h,ll diff)
+ll getans(ll node,ll start,ll end,ll l,ll r)
 {
-	if(lazy[q]!=-1)
-	{
-		st[q]=max(st[q],1ll)*lazy[q];
-		if(l!=h)
-		{
-			lazy[2*q]=max(lazy[2*q],1ll)*lazy[q];
-			lazy[2*q+1]=max(lazy[2*q+1],1ll)*lazy[q];
-		}
-		lazy[q]=-1;
-	}
-	if(l>=o&&h<=e)
-	{
-		st[q]=max(st[q],1ll)*diff;
-		if(l!=h)
-		{
-			lazy[2*q]=max(lazy[2*q],1ll)*diff;
-			lazy[2*q+1]=max(lazy[2*q+1],1ll)*diff;
-		}
-		lazy[q]=-1;
-		return st[q];
-	}
-	if(e<l||o>h)
-		return st[q];
-	ll mid=(l+h)/2;
-	st[q]=update(2*q,o,e,l,mid,diff)+update(2*q+1,o,e,mid+1,h,diff);
-	return st[q];
+    if(start>end||start>r||end<l)
+        return 0;         
+    if(lazy[node]!=0)
+    {
+        tree[node]+=(end-start+1)*lazy[node];
+        if(start!=end){
+            lazy[node*2]+=lazy[node];
+            lazy[node*2+1]+=lazy[node];
+        }
+        lazy[node] = 0;                
+    }
+    if(start>=l&&end<=r)        
+        return tree[node];
+    ll mid=(start+end)/2;
+    ll p1=queryRange(node*2,start,mid,l,r);
+    ll p2=queryRange(node*2+1,mid+1,end,l,r); 
+    return (p1+p2);
 }
 
 void solve()
