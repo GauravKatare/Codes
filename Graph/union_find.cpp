@@ -36,15 +36,21 @@ ll finds(ll a)
 	return a;	
 }	
 
-void unions(ll x,ll y)
+void unions(ll a,ll b)
 {
-	if(parent[x].se>parent[y].se)
+	ll x=finds(a),y=finds(b);
+	if(parent[x].se>parent[y].se){
+		parent[b].fi=x;
 		parent[y].fi=x;
-	else if(parent[x].se<parent[y].se)
+	}
+	else if(parent[x].se<parent[y].se){
+		parent[a].fi=y;
 		parent[x].fi=y;
+	}
 	else
 	{
 		parent[x].fi=y;
+		parent[a].fi=y;
 		parent[x].se++;
 	}
 }
@@ -71,7 +77,7 @@ void solve()
 		{
 			vv[a].pb(b);
 			vv[b].pb(a);
-			unions(finds(a),finds(b));
+			unions(a,b);
 			sum+=v[i].fi;
 		}
 	}
