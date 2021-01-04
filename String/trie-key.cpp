@@ -26,39 +26,40 @@ struct link
 };
 typedef struct link node;
 
-node* newnode(ll n)
+node* newnode()
 {
     node *head=(node *)malloc(sizeof(node));
-    head->c[n]=NULL;
-    head->end=0;
+    head->c[0]=NULL;head->c[1]=NULL;
     return head;
 }
 
-void insert(node* head,ll x)
-{
-    if(x==str.size())
-    {
-        head->end=1;
-        return ;
+void insert(node* head,int nums){
+    for(int i=31;i>=0;i--){
+        int a=((nums>>i)&1);
+        if(head->c[a]==NULL)
+            head->c[a]=newnode();
+        head=head->c[a];
     }
-    ll t=str[x]-'a';
-    if(head->c[t]==NULL)
-        head->c[t]=newnode(t);
-    insert(head->c[t],x+1);
 }
 
-ll find(node* head,ll x)
-{
-    ll t=str[x]-'a';
-    if(x==str.size())
-    {
-        if(head->end==1)
-            return 1;
-        return 0;
+int finds(node *head,int x,int m,int ind,int val){
+    if(m<val)
+        return -1;
+    if(ind==-1)
+        return x^val;
+    int a=(x>>ind)&1;
+    int ans1=-1,ans2=-1;
+    if(head->c[1-a]!=NULL){
+        ans2=finds(head->c[1-a],x,m,ind-1,(val|(1-a)<<ind));
+        if(ans2>=0)
+            return ans2;
     }
-    if(head->c[t]==NULL)
-        return 0;
-    return find(head->c[t],x+1);
+    if(head->c[a]!=NULL){
+        ans1=finds(head->c[a],x,m,ind-1,val|(a<<ind));
+        if(ans1>=0)
+            return ans1;
+    }
+    return max(ans1,ans2);
 }
 
 int main()
